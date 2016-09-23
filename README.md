@@ -1,0 +1,1 @@
+This repository contains all assigments for the course Single Page Web Apps with Angularjs taken in 09/23/2016.
