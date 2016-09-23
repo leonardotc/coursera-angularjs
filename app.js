@@ -4,7 +4,7 @@
   var myFirstAngularController = function($scope) {
     //start as an empty list
     $scope.lunchList = '';
-    $scope.tooMuchMsg = 'Enjoy!';
+    $scope.tooMuchMsg = '';
 
     $scope.isTooMuch = function() {
       var str = $scope.lunchList;
