@@ -7,9 +7,12 @@
     <style>body { font-size: 1.5em; }</style>
     <title>Assignment 1 - Single Page Web Applications with AngularJS</title>
   </head>
-  <body ng-app>
-    <div ng>
-      
+  <body ng-app='myFirstAngularApp'>
+    <div ng-controller='myFirstAngularController'>
+      <input ng-model="lunchList">
+      <button ng-click="isTooMuch();">Check If Too Much</button>
+      <br/><br/>
+      <span>{{tooMuchMsg}}<span>
     </div>
   </body>
 </html>
