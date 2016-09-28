@@ -1,18 +1,56 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
   <head>
-    <meta charset="utf-8">
+    <title>Shopping List Check Off</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles/bootstrap.min.css">
     <script src="angular.min.js"></script>
     <script src="app.js"></script>
-    <style>body { font-size: 1.5em; }</style>
-    <title>Assignment 1 - Single Page Web Applications with AngularJS</title>
+    <style>
+      .emptyMessage {
+        font-weight: bold;
+        color: red;
+        font-size: 1.2em;
+      }
+      li {
+        margin-bottom: 7px;
+        font-size: 1.2em;
+      }
+      li > button {
+        margin-left: 6px;
+      }
+      button > span {
+        color: green;
+      }
+    </style>
   </head>
-  <body ng-app='myFirstAngularApp'>
-    <div ng-controller='myFirstAngularController'>
-      <input ng-model="lunchList">
-      <button ng-click="isTooMuch();">Check If Too Much</button>
-      <br/><br/>
-      <span>{{tooMuchMsg}}<span>
+<body ng-app="ShoppingListCheckOff">
+  <div class="container">
+  <h1>Shopping List Check Off</h1>
+
+  <div class="row">
+
+    <!-- To Buy List -->
+    <div class="col-md-6" ng-controller="ToBuyController as slCtrl">
+     <h2>To Buy:</h2>
+     <ul>
+       <li ng-repeat="item in slCtrl.shoppingList">
+       Buy {{item.quantity}} {{item.unit}} of {{item.name}} <button ng-click="slCtrl.buyItem($index)" class="btn btn-default"><span class="glyphicon glyphicon-ok" ng-if="item.bought"></span> Bought</button>
+       </li>
+     </ul>
+     <div ng-show="slCtrl.everythingBought()" class="emptyMessage">Everything is bought!</div>
     </div>
-  </body>
+
+    <!-- Already Bought List -->
+    <div class="col-md-6" ng-controller="AlreadyBoughtController as blCtrl">
+     <h2>Already Bought:</h2>
+     <ul>
+       <li ng-repeat="item in blCtrl.getBoughtList()">Bought {{item.quantity}} {{item.unit}} of {{item.name}}</li>
+     </ul>
+     <div ng-show="blCtrl.nothingBought()" class="emptyMessage">Nothing bought yet.</div>
+    </div>
+  </div>
+</div>
+
+</body>
 </html>

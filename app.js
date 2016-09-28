@@ -1,32 +1,68 @@
 (function() {
   'use strict'
 
-  var myFirstAngularController = function($scope) {
-    //start as an empty list
-    $scope.lunchList = '';
-    $scope.tooMuchMsg = '';
+  angular.module('ShoppingListCheckOff',[])
+    .controller('ToBuyController', ToBuyController)
+    .controller('AlreadyBoughtController', AlreadyBoughtController)
+    .service('ShoppingListCheckOffService',ShoppingListCheckOffService);
 
-    $scope.isTooMuch = function() {
-      var str = $scope.lunchList;
-      var checkEmpt
+  ToBuyController.$inject = ['ShoppingListCheckOffService']
+  function ToBuyController(ShoppingListCheckOffService) {
+    var ctrl = this;
 
-      if(str.length > 0) {
+    ctrl.shoppingList = ShoppingListCheckOffService.getShoppingList();
+    ctrl.everythingBought = function() { return ShoppingListCheckOffService.everythingBought(); };
 
-        $scope.tooMuchMsg = (str.includes(",")
-          && str.split(',').filter(function(el) { return el.length > 0 }).length > 3)? 
-          'Too much!' : 'Enjoy!';
-
-      }
-      else {
-        $scope.tooMuchMsg = 'Please enter data first';
-      }
+    ctrl.buyItem = function($index) {
+      ShoppingListCheckOffService.buy($index);
     };
   };
 
-  myFirstAngularController.$inject = ['$scope'];
+  AlreadyBoughtController.$inject = ['ShoppingListCheckOffService']
+  function AlreadyBoughtController(ShoppingListCheckOffService) {
+    var ctrl = this;
 
+    ctrl.getBoughtList = function() {
+      return ShoppingListCheckOffService.getBoughtList();
+    }
+    
+    ctrl.nothingBought = function() { 
+      return ShoppingListCheckOffService.nothingBought(); 
+    };
 
-  angular.module('myFirstAngularApp',[])
-    .controller('myFirstAngularController',myFirstAngularController);
+  };
+
+  // I assumed the Hints were optional so i followed a different approach
+  function ShoppingListCheckOffService() {
+    var service = this;
+
+    service.list = [
+      { name: "cookies", quantity: 10, unit: 'bag(s)', bought: false },
+      { name: "chips", quantity: 10, unit: 'bag(s)', bought: false },
+      { name: "coke", quantity: 10, unit: 'bottle(s)', bought: false },
+      { name: "doritos", quantity: 10, unit: 'bag(s)', bought: false },
+      { name: "fried fish", quantity: 10, unit: 'unit(s)', bought: false }
+    ];
+
+    service.getShoppingList = function() {
+      return service.list;
+    };
+
+    service.buy = function(i) {
+      service.list[i].bought = !service.list[i].bought;
+    };
+
+    service.getBoughtList = function() {
+      return service.list.filter(function(item) { return item.bought });
+    };
+
+    service.everythingBought = function() {
+      return service.getBoughtList().length === service.getShoppingList().length;
+    };
+
+    service.nothingBought = function() {
+      return service.getBoughtList().length == 0;
+    }
+  };
 
 })();
